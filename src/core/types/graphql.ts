@@ -10,19 +10,20 @@ export interface IQuery {
   __typename?: 'IQuery';
   queryTime(): DateTime | Promise<DateTime>;
   getUserById(id: string): UserResult | Promise<UserResult>;
+  getUserByEmail(email: string): UserResult | Promise<UserResult>;
 }
 
 export interface IMutation {
   __typename?: 'IMutation';
   mutateTime(): DateTime | Promise<DateTime>;
-  createUser(name: string): UserResult | Promise<UserResult>;
-  deleteUserById(id: string): UserResult | Promise<UserResult>;
+  createUser(name: string, email: string): UserResult | Promise<UserResult>;
 }
 
 export interface User {
   __typename?: 'User';
   id: string;
   name: string;
+  email: string;
   createdAt: DateTime;
 }
 

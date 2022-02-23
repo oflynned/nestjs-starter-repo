@@ -7,9 +7,12 @@ export class UserGraphqlResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation('createUser')
-  async createUser(@Args('name') name: string): Promise<UserResult> {
+  async createUser(
+    @Args('name') name: string,
+    @Args('email') email: string,
+  ): Promise<UserResult> {
     try {
-      const user = await this.userService.createUser(name);
+      const user = await this.userService.createUser(name, email);
 
       return {
         __typename: 'User',
@@ -31,6 +34,31 @@ export class UserGraphqlResolver {
       return {
         __typename: 'UserNotFound',
         message: `User with id ${id} could not be found`,
+      };
+    }
+
+    if (user.deletedAt) {
+      return {
+        __typename: 'DeletedUser',
+        id: user.id,
+        deletedAt: user.deletedAt ?? new Date(),
+      };
+    }
+
+    return {
+      __typename: 'User',
+      ...user,
+    };
+  }
+
+  @Query('getUserByEmail')
+  async getUserByEmail(@Args('email') email: string): Promise<UserResult> {
+    const user = await this.userService.getUserByEmail(email);
+
+    if (!user) {
+      return {
+        __typename: 'UserNotFound',
+        message: `User with email ${email} could not be found`,
       };
     }
 

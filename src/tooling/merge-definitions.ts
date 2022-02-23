@@ -7,7 +7,7 @@ import { join } from 'path';
 (async () => {
   try {
     const typesArray = await loadFiles([
-      join(__dirname, '../apps/**/*.graphql'),
+      join(__dirname, '../gateway/graphql/**/*.graphql'),
     ]);
     const typeDefs = mergeTypeDefs(typesArray);
     const printedTypeDefs = print(typeDefs);

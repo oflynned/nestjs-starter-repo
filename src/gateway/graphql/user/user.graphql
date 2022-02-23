@@ -1,6 +1,7 @@
 type User {
     id: ID!
     name: String!
+    email: String!
     createdAt: DateTime!
 }
 
@@ -21,9 +22,9 @@ union UserResult = User | DeletedUser | UserNotFound | InvalidUserInput
 
 extend type Query {
     getUserById(id: ID!): UserResult!
+    getUserByEmail(email: String!): UserResult!
 }
 
 extend type Mutation  {
-    createUser(name: String!): UserResult!
-    deleteUserById(id: ID!): UserResult!
+    createUser(name: String!, email: String!): UserResult!
 }

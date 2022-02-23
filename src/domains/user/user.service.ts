@@ -14,15 +14,15 @@ export class UserService {
     private readonly createUserSchema: CreateUserSchema,
   ) {}
 
-  async createUser(name: string): Promise<UserEntity> {
-    const { value, error } = this.createUserSchema.validate({ name });
+  async createUser(name: string, email: string): Promise<UserEntity> {
+    const { value, error } = this.createUserSchema.validate({ name, email });
 
     if (error) {
       throw new InvalidUserArgumentException();
     }
 
-    const dto: CreateUserDto = { name: value.name };
-    const existingUser = await this.repo.findUserByName(name);
+    const dto: CreateUserDto = { name: value.name, email: value.email };
+    const existingUser = await this.repo.findUserByEmail(email);
 
     if (existingUser) {
       return existingUser;

@@ -1,22 +1,14 @@
-import { credential } from 'firebase-admin';
-
 export class RawConfigService {
   private env: Record<string, string | null>;
-  private credentials: typeof credential;
 
   static getInstance(
     env: Record<string, string | null> = process.env,
-    credentials: typeof credential = credential,
   ): RawConfigService {
-    return new RawConfigService().withEnvironment(env, credentials);
+    return new RawConfigService().withEnvironment(env);
   }
 
-  withEnvironment(
-    env: Record<string, string | null> = {},
-    credentials: typeof credential = credential,
-  ): RawConfigService {
+  withEnvironment(env: Record<string, string | null> = {}): RawConfigService {
     this.env = env;
-    this.credentials = credentials;
 
     return this;
   }
