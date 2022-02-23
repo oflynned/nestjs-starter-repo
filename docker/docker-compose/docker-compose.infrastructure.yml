@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  redis:
+    container_name: redis
+    image: redis:6
+    restart: always
+    ports:
+      - "6379:6379"
+
+  postgres:
+    container_name: postgres
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: api
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    volumes:
+      - /var/lib/postgresql/data
