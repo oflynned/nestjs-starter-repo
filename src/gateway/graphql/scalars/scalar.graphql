@@ -1,0 +1,9 @@
+type Query {
+    queryTime: DateTime!
+}
+
+type Mutation {
+    mutateTime: DateTime!
+}
+
+scalar DateTime
