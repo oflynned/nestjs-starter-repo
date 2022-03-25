@@ -16,4 +16,9 @@ module.exports = {
   coverageDirectory: './coverage',
   testMatch: ['**/?(*.)+(e2e-spec|spec).[jt]s?(x)'],
   testPathIgnorePatterns: ['node_modules', 'dist'],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+    },
+  },
 };

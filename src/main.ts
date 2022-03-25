@@ -1,8 +1,9 @@
+import { createBullBoard } from '@bull-board/api';
+import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { ExpressAdapter } from '@bull-board/express';
 import { CorrelationIdMiddleware } from '@eropple/nestjs-correlation-id';
 import { NestFactory } from '@nestjs/core';
 import { Queue } from 'bull';
-import { createBullBoard } from 'bull-board';
-import { BullAdapter } from 'bull-board/bullAdapter';
 import expressBasicAuth from 'express-basic-auth';
 import { ApiModule } from './api.module';
 import { ApiConfigService } from './core/config/api.config.service';
@@ -20,11 +21,14 @@ async function bootstrap() {
 
   app.use(CorrelationIdMiddleware());
 
-  const queues = [app.get<Queue>(`BullQueue_${EMAIL_QUEUE}`)];
+  const bullServerAdapter = new ExpressAdapter();
+  bullServerAdapter.setBasePath('/queues');
 
-  const { router: bullRouter } = createBullBoard(
-    queues.map((queue) => new BullAdapter(queue)),
-  );
+  const queues = [app.get<Queue>(`BullQueue_${EMAIL_QUEUE}`)];
+  createBullBoard({
+    queues: queues.map((queue) => new BullAdapter(queue)),
+    serverAdapter: bullServerAdapter,
+  });
 
   if (config.isProductionOrStagingMode()) {
     const requireAdmin = expressBasicAuth({
@@ -33,9 +37,9 @@ async function bootstrap() {
     });
 
     // https://selleo.com/til/posts/lkkkedpjjl-bull-board-for-nestjs
-    app.use('/admin/queues', requireAdmin, bullRouter);
+    app.use('/admin/queues', requireAdmin, bullServerAdapter.getRouter());
   } else {
-    app.use('/admin/queues', bullRouter);
+    app.use('/admin/queues', bullServerAdapter.getRouter());
   }
 
   await app.listen(config.getPort(), '0.0.0.0', () => {
