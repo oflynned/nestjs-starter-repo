@@ -1,0 +1,45 @@
+name: Dependencies
+on:
+  schedule:
+    - cron:  '*/15 * * * *' # every 15 mins
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Audit dependencies
+        run: |
+          npm run deps:upgrade:minor
+          npm install
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Dependency Audit"
+          commit-message: "chore(deps): update dependencies to latest minor versions"
+          body: |
+            This PR is auto generated
+          branch: chore/dependency-audit
