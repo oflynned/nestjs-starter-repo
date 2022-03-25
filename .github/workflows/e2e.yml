@@ -40,7 +40,7 @@ jobs:
       - name: Run migrations
         run: npm run migrate:up
         env:
-          DATABASE_URL: "postgres://user:password@localhost:5432/api"
+          DATABASE_URL: "postgres://user:password@localhost:5432/nestjs-example-api"
 
       - name: Wait until orchestrated
         uses: mydea/action-wait-for-api@v1
