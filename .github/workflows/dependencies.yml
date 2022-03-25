@@ -1,7 +1,11 @@
 name: Dependencies
+
 on:
-  schedule:
-    - cron:  '*/15 * * * *' # every 15 mins
+#  schedule:
+#    - cron:  '*/15 * * * *' # every 15 mins
+  push:
+    branches-ignore:
+      - master
   workflow_dispatch:
 
 jobs:
