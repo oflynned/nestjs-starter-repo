@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../../core/entities/user.entity';
 import { EmailQueueProducer } from '../../queues/email/email.queue.producer';
-import { CreateUserDto } from './create-user.dto';
 import { CreateUserSchema } from './create-user.schema';
+import { CreateUserDto } from './dto/create-user.dto';
+import { GetUserByEmailDto } from './dto/get-user-by-email.dto';
+import { GetUserByIdDto } from './dto/get-user-by-id.dto';
 import { InvalidUserArgumentException } from './invalid-user-argument.exception';
 import { UserRepo } from './user.repo';
 
@@ -14,21 +16,20 @@ export class UserService {
     private readonly createUserSchema: CreateUserSchema,
   ) {}
 
-  async createUser(name: string, email: string): Promise<UserEntity> {
-    const { value, error } = this.createUserSchema.validate({ name, email });
+  async createUser(dto: CreateUserDto): Promise<UserEntity> {
+    const { value, error } = this.createUserSchema.validate(dto);
 
     if (error) {
-      throw new InvalidUserArgumentException();
+      throw new InvalidUserArgumentException(error.message);
     }
 
-    const dto: CreateUserDto = { name: value.name, email: value.email };
-    const existingUser = await this.repo.findUserByEmail(email);
+    const existingUser = await this.repo.findUserByEmail(value.email);
 
     if (existingUser) {
       return existingUser;
     }
 
-    const user = await this.repo.createUser(dto);
+    const user = await this.repo.createUser(value);
 
     await this.emailQueue.enqueue({
       email: user.email,
@@ -48,14 +49,14 @@ export class UserService {
     return null;
   }
 
-  async getUserByEmail(email: string): Promise<UserEntity | null> {
-    const user = await this.repo.findUserByEmail(email);
+  async getUserByEmail(dto: GetUserByEmailDto): Promise<UserEntity | null> {
+    const user = await this.repo.findUserByEmail(dto.email);
 
     return user ?? null;
   }
 
-  async getUserById(id: string): Promise<UserEntity | null> {
-    const user = await this.repo.findUserById(id);
+  async getUserById(dto: GetUserByIdDto): Promise<UserEntity | null> {
+    const user = await this.repo.findUserById(dto.id);
 
     return user ?? null;
   }
