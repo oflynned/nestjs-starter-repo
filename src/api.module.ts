@@ -1,4 +1,5 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BullModule } from '@nestjs/bull';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -35,9 +36,10 @@ import { GatewayModule } from './gateway/gateway.module';
         };
       },
     }),
-    GraphQLModule.forRootAsync({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       imports: [ApiConfigModule],
       inject: [ApiConfigService],
+      driver: ApolloDriver,
       useFactory: async (config: ApiConfigService): Promise<unknown> => {
         const isRelaxedEnv = config.isDevelopmentOrStagingMode();
         return {

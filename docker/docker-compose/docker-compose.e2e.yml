@@ -29,7 +29,7 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: api
+      POSTGRES_DB: nestjs-example-api
       PG_DATA: /var/lib/postgresql/data
     ports:
       - "5432:5432"

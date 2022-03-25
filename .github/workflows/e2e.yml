@@ -1,0 +1,59 @@
+name: E2E
+
+on:
+  push:
+    branches-ignore:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Orchestrate stack
+        run: docker-compose --file ./docker/docker-compose/docker-compose.e2e.yml up --detach
+
+      - name: Run migrations
+        run: npm run migrate:up
+        env:
+          DATABASE_URL: "postgres://user:password@localhost:5432/nestjs-example-api"
+
+      - name: Wait until orchestrated
+        uses: mydea/action-wait-for-api@v1
+        with:
+          url: "http://localhost:3002/health"
+          expected-response-field: "health"
+          expected-response-field-value: "ok"
+          interval: "5"
+          timeout: "60"
+
+      - name: Run e2e tests
+        run: npm run test:e2e
+
+      - name: Tear down stack
+        if: always()
+        run: docker-compose --file ./docker/docker-compose/docker-compose.e2e.yml down

@@ -1,0 +1,20 @@
+query getUserById($id: ID!) {
+    getUserById(id: $id) {
+        __typename
+        ... on User {
+            id
+            email
+            name
+        }
+        ... on DeletedUser {
+            id
+            deletedAt
+        }
+        ... on UserNotFound {
+            message
+        }
+        ... on InvalidUserInput {
+            message
+        }
+    }
+}

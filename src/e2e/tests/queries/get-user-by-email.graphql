@@ -1,0 +1,20 @@
+query getUserByEmail($email: String!) {
+    getUserByEmail(email: $email) {
+        __typename
+        ... on User {
+            id
+            email
+            name
+        }
+        ... on DeletedUser {
+            id
+            deletedAt
+        }
+        ... on UserNotFound {
+            message
+        }
+        ... on InvalidUserInput {
+            message
+        }
+    }
+}

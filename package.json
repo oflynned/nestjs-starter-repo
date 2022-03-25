@@ -30,8 +30,8 @@
     "prestart": "npm run types && npm run assets:copy",
     "start": "npm run migrate:pending && nest start --watch",
     "start:dev": "nest start --debug --watch",
-    "start:e2e": "echo \"Firing up mock server...\" && ts-node src/e2e/e2e.main.ts",
-    "start:e2e:watch": "nodemon --ignore '**/*.e2e-spec.ts' src/e2e/e2e.main.ts",
+    "start:e2e": "echo \"Firing up mock server...\" && ts-node src/main.ts",
+    "start:e2e:watch": "nodemon --ignore '**/*.e2e-spec.ts' src/main.ts",
     "test": "npm run test:unit",
     "test:e2e": "jest --config jest.config.e2e.js --runInBand --detectOpenHandles",
     "test:e2e:watch": "npm run test:e2e -- --watch",
@@ -61,6 +61,7 @@
     "@mikro-orm/migrations": "5.1.1",
     "@mikro-orm/nestjs": "5.0.1",
     "@mikro-orm/postgresql": "5.1.1",
+    "@nestjs/apollo": "^10.0.8",
     "@nestjs/bull": "0.5.4",
     "@nestjs/common": "8.4.2",
     "@nestjs/config": "2.0.0",
@@ -87,6 +88,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.0.0",
     "@graphql-tools/load-files": "6.5.3",
     "@graphql-tools/merge": "8.2.6",
     "@mikro-orm/cli": "5.1.1",
