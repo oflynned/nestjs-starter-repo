@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-          uses: actions/checkout@v2
-          with:
-            fetch-depth: 0
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
