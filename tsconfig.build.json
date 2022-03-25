@@ -5,9 +5,11 @@
     "test",
     "dist",
     "**/*.spec.ts",
+    "**/*.e2e-spec.ts",
     "**/*.integration.ts",
     "**/factories",
-    "**/tooling"
+    "**/tooling",
+    "**/e2e"
   ],
   "include": [
     "./src"
