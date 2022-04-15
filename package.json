@@ -54,8 +54,8 @@
     ]
   },
   "dependencies": {
-    "@bull-board/api": "3.10.3",
-    "@bull-board/express": "3.10.3",
+    "@bull-board/api": "3.10.4",
+    "@bull-board/express": "3.10.4",
     "@eropple/nestjs-correlation-id": "1.0.1",
     "@mikro-orm/core": "5.1.2",
     "@mikro-orm/migrations": "5.1.2",
