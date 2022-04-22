@@ -66,7 +66,7 @@
     "@nestjs/common": "8.4.4",
     "@nestjs/config": "2.0.0",
     "@nestjs/core": "8.4.4",
-    "@nestjs/graphql": "10.0.9",
+    "@nestjs/graphql": "10.0.10",
     "@nestjs/platform-express": "8.4.4",
     "@sentry/integrations": "6.19.6",
     "@sentry/node": "6.19.6",
@@ -88,7 +88,7 @@
     "uuid": "8.3.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.1.2",
+    "@faker-js/faker": "^6.2.0",
     "@graphql-tools/load-files": "6.5.3",
     "@graphql-tools/merge": "8.2.10",
     "@mikro-orm/cli": "5.1.2",
