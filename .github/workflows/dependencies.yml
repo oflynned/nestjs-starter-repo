@@ -35,9 +35,12 @@ jobs:
         run: npm ci
 
       - name: Audit dependencies
+        id: audit
         run: |
+          echo ::set-output name=minor_dep_upgrades::$(npm run deps:lint:minor) 
           npm run deps:upgrade:minor
           npm install
+          echo ::set-output name=major_dep_upgrades::$(npm run deps:lint) 
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -46,5 +49,10 @@ jobs:
           title: "Dependency Audit"
           commit-message: "chore(deps): update dependencies to latest minor versions"
           body: |
-            This PR is auto generated
+            Minor version changes applied:
+            ${{ steps.audit.outputs.minor_dep_upgrades }}
+            
+            Major version changes outstanding:
+            ${{ steps.audit.outputs.major_dep_upgrades }}
+
           branch: chore/dependency-audit
