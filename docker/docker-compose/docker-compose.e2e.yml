@@ -13,8 +13,8 @@ services:
     depends_on:
       - postgres
       - redis
-    command: npm run start:e2e
-    
+    command: bash -c "npm run migrate:up && npm run start:e2e"
+
   redis:
     container_name: redis
     image: redis:6
