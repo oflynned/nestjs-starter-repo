@@ -37,10 +37,20 @@ jobs:
       - name: Audit dependencies
         id: audit
         run: |
-          echo ::set-output name=minor_dep_upgrades::$(npm run deps:lint:minor) 
+          minor_changes=$(npm run deps:lint:minor)
+          minor_changes="${minor_changes//'%'/'%25'}"
+          minor_changes="${minor_changes//$'\n'/'%0A'}"
+          minor_changes="${minor_changes//$'\r'/'%0D'}" 
+          
+          echo ::set-output name=minor_changes::$minor_changes
           npm run deps:upgrade:minor
           npm install
-          echo ::set-output name=major_dep_upgrades::$(npm run deps:lint) 
+          
+          major_changes=$(npm run deps:lint)
+          major_changes="${major_changes//'%'/'%25'}"
+          major_changes="${major_changes//$'\n'/'%0A'}"
+          major_changes="${major_changes//$'\r'/'%0D'}" 
+          echo ::set-output name=major_changes::$major_changes
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
@@ -50,9 +60,8 @@ jobs:
           commit-message: "chore(deps): update dependencies to latest minor versions"
           body: |
             Minor version changes applied:
-            ${{ steps.audit.outputs.minor_dep_upgrades }}
+            ${{ steps.audit.outputs.minor_changes }}
             
-            Major version changes outstanding:
-            ${{ steps.audit.outputs.major_dep_upgrades }}
-
+            Major version changes still outstanding:
+            ${{ steps.audit.outputs.major_changes }}
           branch: chore/dependency-audit
