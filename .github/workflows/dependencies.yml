@@ -60,8 +60,12 @@ jobs:
           commit-message: "chore(deps): update dependencies to latest minor versions"
           body: |
             Minor version changes applied:
+            ```
             ${{ steps.audit.outputs.minor_changes }}
+            ```
             
             Major version changes still outstanding:
+            ```
             ${{ steps.audit.outputs.major_changes }}
+            ```
           branch: chore/dependency-audit
