@@ -125,7 +125,7 @@
     "readline-sync": "1.4.10",
     "sort-package-json": "1.57.0",
     "superagent": "7.1.6",
-    "ts-jest": "28.0.3",
+    "ts-jest": "28.0.4",
     "ts-loader": "9.3.0",
     "ts-morph": "15.0.0",
     "ts-node": "10.8.0",
