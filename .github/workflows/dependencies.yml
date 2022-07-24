@@ -53,7 +53,7 @@ jobs:
           echo ::set-output name=major_changes::$major_changes
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: "Dependency Audit"
