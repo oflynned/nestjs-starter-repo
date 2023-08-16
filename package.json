@@ -124,7 +124,7 @@
     "prettier-plugin-organize-imports": "2.3.4",
     "readline-sync": "1.4.10",
     "sort-package-json": "1.57.0",
-    "superagent": "7.1.6",
+    "superagent": "8.1.2",
     "ts-jest": "28.0.7",
     "ts-loader": "9.3.1",
     "ts-morph": "15.1.0",
